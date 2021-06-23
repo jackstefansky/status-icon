@@ -1,11 +1,19 @@
-const {app, Tray} = require('electron');
+const {app, Menu, Tray} = require('electron');
 
-let appIcon = null;
+let appTray = null;
 app.dock.hide()
 app.on('ready', () => {
-  appIcon = new Tray(__dirname + '/blue.png');
+  appTray = new Tray(__dirname + '/blue.png');
   process.send('initialized');
-  process.on('message', function (image) {
-    appIcon.setImage(image);
+  process.on('message', function (msg) {
+
+    if(msg.type == "icon") {
+      appTray.setImage(msg.icon);
+    }
+
+    if(msg.type == "menu") {
+      appTray.setContextMenu( Menu.buildFromTemplate(msg.menu))
+    }
+
   });
 });
