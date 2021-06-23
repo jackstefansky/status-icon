@@ -7,13 +7,24 @@ module.exports = function() {
   });
 
   let initialized = false;
-  let last = null;
+  let lastIcon = null;
+  let lastMenu = null;
 
   ps.on("message", function(msg) {
     if (msg === "initialized") {
       initialized = true;
-      if (last) {
-        ps.send(last);
+      if (lastIcon) {
+        ps.send({
+          "type": "icon",
+          "icon":icon
+        });
+      }
+
+      if(lastMenu) {
+        ps.send({
+          "type": "menu",
+          "menu": menu
+        });
       }
     }
   });
@@ -22,21 +33,25 @@ module.exports = function() {
     destroy: function() {
        ps.kill();
     },
-    set: function(icon) {
+    setIcon: function(icon) {
       if (initialized) {
-        ps.send(icon);
+        ps.send({
+          "type": "icon",
+          "icon":icon
+        });
       } else {
-        last = icon;
+        lastIcon = icon;
       }
     },
-    ok: function() {
-      ps.send(__dirname + "/green.png");
+    setMenu: function(menu) {
+      if (initialized) {
+        ps.send({
+          "type": "menu",
+          "menu": menu
+        });
+      } else {
+        lastMenu = menu;
+      }
     },
-    error: function() {
-      ps.send(__dirname + "/red.png");
-    },
-    progress: function() {
-      ps.send(__dirname + "/blue.png");
-    }
   };
 };
