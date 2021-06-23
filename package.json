@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "main": "index.js",
   "dependencies": {
-    "electron": "^8.2.3"
+    "electron": "^13.1.4"
   },
   "description": "Easy way of adding tray icon telling you what's the build status",
   "repository": {
